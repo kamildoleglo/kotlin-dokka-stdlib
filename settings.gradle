@@ -2,4 +2,3 @@ rootProject.name = 'kotlin-dokka-stdlib'
 
 include 'kotlin_native'
 include 'kotlin_big'
-include 'ant'
