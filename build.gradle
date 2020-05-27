@@ -11,6 +11,7 @@ buildscript {
 plugins {
     id "de.undercouch.download" version "3.4.3"
     id 'com.github.jk1.tcdeps' version '0.17'
+    id "java"
 }
 apply plugin: "org.jetbrains.dokka"
 
@@ -20,6 +21,7 @@ configurations {
 
 repositories {
     mavenLocal()
+    mavenCentral()
     maven { url = "https://dl.bintray.com/kotlin/kotlin-dev" }
     maven { url = "https://teamcity.jetbrains.com/guestAuth/repository/download/Kotlin_Dokka_DokkaAntMavenGradle/$dokka_build/maven" }
     jcenter()
@@ -45,18 +47,20 @@ task cleanupSources(type: Delete) {
     }
 }
 
+configurations {
+    annotations
+}
 
 dependencies {
+    annotations("org.jetbrains:annotations:13.0")
     dokkaPlugins("org.jetbrains.dokka:dokka-base:$dokka_version")
 }
 
-def outputDir = "$buildDir/doc"
+def outputDir = "$buildDir/dokka"
 
-//clean.doFirst {
-//    delete(outputDir)
-//}
 
 task callDokka() {
+    delete(outputDir)
     dependsOn = [extractAll, cleanupSources]
 }
 
@@ -72,10 +76,11 @@ gradle.projectsEvaluated {
     def stdlibSamples = "$kotlin_root/libraries/stdlib/samples/test"
     def kotlinTestIncludeMd = "$kotlin_root/libraries/kotlin.test/Module.md"
 
-    def stdlibCommonClasspath = ["$kotlin_libs/kotlin-stdlib-common/".toString()]
-    def stdlibJvmClasspath = ["$kotlin_libs/kotlin-stdlib-jdk8/".toString()]
+    def annotations13 = project.configurations.getByName("annotations").singleFile.toString()
+    def stdlibCommonClasspath = ["$kotlin_libs/kotlin-stdlib-common/".toString(), annotations13]
+    def stdlibJvmClasspath = ["$kotlin_libs/kotlin-stdlib-jdk8/".toString(), annotations13]
     def stdlibNativeClasspath = ["$kotlin_native_linux/klib/common/stdlib".toString()]
-    def stdlibJsClasspath = ["$kotlin_libs/kotlin-stdlib-js/".toString()]
+    def stdlibJsClasspath = ["$kotlin_libs/kotlin-stdlib-js/".toString(), annotations13]
     def kotlinTestCommonClasspath = ["$kotlin_libs/kotlin-test-common".toString()]
     def kotlinTestJunitClasspath = ["$kotlin_libs/kotlin-test-junit".toString()]
     def kotlinTestJunit5Classpath = ["$kotlin_libs/kotlin-test-junit5".toString()]
@@ -128,6 +133,7 @@ gradle.projectsEvaluated {
                 includeRootPackage = false
                 samples = [stdlibSamples.toString()]
                 sourceSetName = "JRE6"
+                dependentSourceSets = ["Common"]
                 sourceRoot {
                     path = "$kotlin_sources/kotlin-stdlib"
                 }
@@ -183,6 +189,7 @@ gradle.projectsEvaluated {
                 includeRootPackage = false
                 samples = [stdlibSamples.toString()]
                 sourceSetName = "JRE7"
+                dependentSourceSets = ["Common"]
                 sourceRoot {
                     path = "$kotlin_sources/kotlin-stdlib-jdk7"
                 }
@@ -216,6 +223,7 @@ gradle.projectsEvaluated {
                 includeRootPackage = false
                 samples = [stdlibSamples.toString()]
                 sourceSetName = "JRE8"
+                dependentSourceSets = ["Common"]
                 sourceRoot {
                     path = "$kotlin_sources/kotlin-stdlib-jdk8"
                 }
@@ -250,6 +258,7 @@ gradle.projectsEvaluated {
                 includeRootPackage = false
                 samples = [stdlibSamples.toString()]
                 sourceSetName = "JS"
+                dependentSourceSets = ["Common"]
 
                 sourceRoot {
                     path = "$kotlin_sources/kotlin-stdlib-js"
@@ -289,6 +298,8 @@ gradle.projectsEvaluated {
                 includeRootPackage = "false"
                 samples = [stdlibSamples.toString()]
                 sourceSetName = "Native"
+                dependentSourceSets = ["Common"]
+
                 sourceRoot {
                     path = "$kotlin_native_root/Interop/Runtime/src/main/kotlin"
                 }
