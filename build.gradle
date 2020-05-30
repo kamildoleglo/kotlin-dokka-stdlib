@@ -60,7 +60,7 @@ def outputDir = "$buildDir/dokka"
 
 
 task callDokka() {
-//    delete(outputDir)
+    delete(outputDir)
     dependsOn = [extractAll, cleanupSources]
 }
 
@@ -89,12 +89,12 @@ gradle.projectsEvaluated {
     def kotlinTestJvmClasspath = ["$kotlin_libs/kotlin-test".toString()]
 
 
-    def stdlibPackageList = new URL("file://$outputDir/kotlin-stdlib/package-list".toString())
+    def stdlibPackageList = new URL("file://$outputDir/kotlin-stdlib/kotlin-stdlib/package-list".toString())
     def junit5PackageList = new URL("https://junit.org/junit5/docs/current/api/element-list".toString())
     def kotlinLanguageVersion = 1.3
 
     task dokkaStdlib(type: org.jetbrains.dokka.gradle.DokkaTask) {
-        outputDirectory = outputDir
+        outputDirectory = outputDir + "/kotlin-stdlib"
         disableAutoconfiguration = true
         dokkaSourceSets {
             "kotlin-stdlib-common" {
@@ -325,7 +325,7 @@ gradle.projectsEvaluated {
     }
 
     task dokkaKotlinTest(type: org.jetbrains.dokka.gradle.DokkaTask) {
-        outputDirectory = outputDir
+        outputDirectory = outputDir + "/kotlin.test"
         disableAutoconfiguration = true
         dokkaSourceSets {
             "kotlin-test-common" {
