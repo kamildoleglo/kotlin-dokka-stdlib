@@ -60,7 +60,7 @@ def outputDir = "$buildDir/dokka"
 
 
 task callDokka() {
-    delete(outputDir)
+//    delete(outputDir)
     dependsOn = [extractAll, cleanupSources]
 }
 
@@ -94,7 +94,7 @@ gradle.projectsEvaluated {
     def kotlinLanguageVersion = 1.3
 
     task dokkaStdlib(type: org.jetbrains.dokka.gradle.DokkaTask) {
-        outputDirectory = "$buildDir/doc"
+        outputDirectory = outputDir
         disableAutoconfiguration = true
         dokkaSourceSets {
             "kotlin-stdlib-common" {
@@ -384,6 +384,7 @@ gradle.projectsEvaluated {
                 }
                 externalDocumentationLink {
                     url = new URL("http://junit.org/junit4/javadoc/latest/")
+                    packageListUrl = new URL("http://junit.org/junit4/javadoc/latest/package-list")
                 }
             }
 
@@ -429,6 +430,7 @@ gradle.projectsEvaluated {
                 }
                 externalDocumentationLink {
                     url = new URL("https://jitpack.io/com/github/cbeust/testng/master/javadoc/")
+                    packageListUrl = new URL("https://jitpack.io/com/github/cbeust/testng/master/javadoc/package-list")
                 }
             }
 
@@ -478,7 +480,7 @@ gradle.projectsEvaluated {
 
 
     callDokka.finalizedBy dokkaStdlib
-//    dokkaStdlib.finalizedBy dokkaKotlinTest
+    dokkaStdlib.finalizedBy dokkaKotlinTest
 }
 
 tasks {
