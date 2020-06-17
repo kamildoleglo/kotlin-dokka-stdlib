@@ -47,12 +47,7 @@ task cleanupSources(type: Delete) {
     }
 }
 
-configurations {
-    annotations
-}
-
 dependencies {
-    annotations("org.jetbrains:annotations:13.0")
     dokkaPlugins("org.jetbrains.dokka:dokka-base:$dokka_version")
 }
 
@@ -76,11 +71,10 @@ gradle.projectsEvaluated {
     def stdlibSamples = "$kotlin_root/libraries/stdlib/samples/test"
     def kotlinTestIncludeMd = "$kotlin_root/libraries/kotlin.test/Module.md"
 
-    def annotations13 = project.configurations.getByName("annotations").singleFile.toString()
-    def stdlibCommonClasspath = ["$kotlin_libs/kotlin-stdlib-common/".toString(), annotations13]
-    def stdlibJvmClasspath = ["$kotlin_libs/kotlin-stdlib-jdk8/".toString(), annotations13]
+    def stdlibCommonClasspath = ["$kotlin_libs/kotlin-stdlib-common".toString()]
+    def stdlibJvmClasspath = ["$kotlin_libs/kotlin-stdlib/".toString(), "$kotlin_sources/kotlin-stdlib-jdk7".toString(), "$kotlin_libs/kotlin-stdlib-jdk8/".toString(), "$kotlin_sources/kotlin-stdlib".toString(), "$kotlin_sources/kotlin-stdlib-common".toString(), "$kotlin_root/core/reflection.jvm/src".toString()]
     def stdlibNativeClasspath = ["$kotlin_native_linux/klib/common/stdlib".toString()]
-    def stdlibJsClasspath = ["$kotlin_libs/kotlin-stdlib-js/".toString(), annotations13]
+    def stdlibJsClasspath = ["$kotlin_libs/kotlin-stdlib-js/".toString()]
     def kotlinTestCommonClasspath = ["$kotlin_libs/kotlin-test-common".toString()]
     def kotlinTestJunitClasspath = ["$kotlin_libs/kotlin-test-junit".toString()]
     def kotlinTestJunit5Classpath = ["$kotlin_libs/kotlin-test-junit5".toString()]
@@ -91,7 +85,7 @@ gradle.projectsEvaluated {
 
     def stdlibPackageList = new URL("file://$outputDir/kotlin-stdlib/kotlin-stdlib/package-list".toString())
     def junit5PackageList = new URL("https://junit.org/junit5/docs/current/api/element-list".toString())
-    def kotlinLanguageVersion = 1.3
+    def kotlinLanguageVersion = 1.4
 
     task dokkaStdlib(type: org.jetbrains.dokka.gradle.DokkaTask) {
         outputDirectory = outputDir + "/kotlin-stdlib"
@@ -109,7 +103,8 @@ gradle.projectsEvaluated {
                 languageVersion = kotlinLanguageVersion
                 includeRootPackage = false
                 samples = [stdlibSamples.toString()]
-                sourceSetName = "Common"
+                sourceSetID = "Common"
+                displayName = "Common"
                 sourceRoot {
                     path = "$kotlin_root/core/builtins/native"
                 }
@@ -121,7 +116,7 @@ gradle.projectsEvaluated {
                 }
             }
 
-            "kotlin-stdlib-jre6" {
+            "kotlin-stdlib-java" {
                 moduleName = "kotlin-stdlib"
                 skipDeprecated = false
                 jdkVersion = 8
@@ -132,10 +127,16 @@ gradle.projectsEvaluated {
                 languageVersion = kotlinLanguageVersion
                 includeRootPackage = false
                 samples = [stdlibSamples.toString()]
-                sourceSetName = "JRE6"
+                displayName = "JRE"
                 dependentSourceSets = ["Common"]
                 sourceRoot {
                     path = "$kotlin_sources/kotlin-stdlib"
+                }
+                sourceRoot {
+                    path = "$kotlin_sources/kotlin-stdlib-jdk7"
+                }
+                sourceRoot {
+                    path = "$kotlin_sources/kotlin-stdlib-jdk8"
                 }
                 sourceRoot {
                     path = "$kotlin_root/core/reflection.jvm/src"
@@ -177,73 +178,6 @@ gradle.projectsEvaluated {
                 }
             }
 
-            "kotlin-stdlib-jre7" {
-                moduleName = "kotlin-stdlib"
-                skipDeprecated = false
-                jdkVersion = 8
-                platform = "jvm"
-                includes = [stdlibIncludeMd.toString()]
-                noStdlibLink = true
-                classpath = stdlibJvmClasspath + stdlibCommonClasspath
-                languageVersion = kotlinLanguageVersion
-                includeRootPackage = false
-                samples = [stdlibSamples.toString()]
-                sourceSetName = "JRE7"
-                dependentSourceSets = ["Common"]
-                sourceRoot {
-                    path = "$kotlin_sources/kotlin-stdlib-jdk7"
-                }
-                perPackageOption {
-                    prefix = "kotlin.reflect.jvm.internal"
-                    suppress = true
-                }
-                perPackageOption {
-                    prefix = "kotlin.jvm.internal"
-                    suppress = true
-                }
-                perPackageOption {
-                    prefix = "kotlin.coroutines.jvm.internal"
-                    suppress = true
-                }
-                perPackageOption {
-                    prefix = "kotlin.coroutines.experimental.migration"
-                    suppress = true
-                }
-            }
-
-            "kotlin-stdlib-jre8" {
-                moduleName = "kotlin-stdlib"
-                skipDeprecated = false
-                jdkVersion = 8
-                platform = "jvm"
-                includes = [stdlibIncludeMd.toString()]
-                noStdlibLink = true
-                classpath = stdlibJvmClasspath + stdlibCommonClasspath
-                languageVersion = kotlinLanguageVersion
-                includeRootPackage = false
-                samples = [stdlibSamples.toString()]
-                sourceSetName = "JRE8"
-                dependentSourceSets = ["Common"]
-                sourceRoot {
-                    path = "$kotlin_sources/kotlin-stdlib-jdk8"
-                }
-                perPackageOption {
-                    prefix = "kotlin.reflect.jvm.internal"
-                    suppress = true
-                }
-                perPackageOption {
-                    prefix = "kotlin.jvm.internal"
-                    suppress = true
-                }
-                perPackageOption {
-                    prefix = "kotlin.coroutines.jvm.internal"
-                    suppress = true
-                }
-                perPackageOption {
-                    prefix = "kotlin.coroutines.experimental.migration"
-                    suppress = true
-                }
-            }
 
             "kotlin-stdlib-js" {
                 moduleName = "kotlin-stdlib"
@@ -257,7 +191,7 @@ gradle.projectsEvaluated {
                 languageVersion = kotlinLanguageVersion
                 includeRootPackage = false
                 samples = [stdlibSamples.toString()]
-                sourceSetName = "JS"
+                displayName = "JS"
                 dependentSourceSets = ["Common"]
 
                 sourceRoot {
@@ -297,7 +231,7 @@ gradle.projectsEvaluated {
                 languageVersion = kotlinLanguageVersion
                 includeRootPackage = "false"
                 samples = [stdlibSamples.toString()]
-                sourceSetName = "Native"
+                displayName = "Native"
                 dependentSourceSets = ["Common"]
 
                 sourceRoot {
@@ -337,7 +271,7 @@ gradle.projectsEvaluated {
                 classpath = kotlinTestCommonClasspath
                 languageVersion = kotlinLanguageVersion
                 includeRootPackage = false
-                sourceSetName = "Common"
+                displayName = "Common"
                 sourceRoot {
                     path = "$kotlin_root/libraries/kotlin.test/common/src/main/kotlin"
                 }
@@ -355,7 +289,7 @@ gradle.projectsEvaluated {
                 classpath = kotlinTestJvmClasspath
                 languageVersion = kotlinLanguageVersion
                 includeRootPackage = false
-                sourceSetName = "JVM"
+                displayName = "JVM"
                 sourceRoot {
                     path = "$kotlin_root/libraries/kotlin.test/jvm/src/main/kotlin"
                 }
@@ -374,7 +308,7 @@ gradle.projectsEvaluated {
                 classpath = kotlinTestJunitClasspath
                 languageVersion = kotlinLanguageVersion
                 includeRootPackage = false
-                sourceSetName = "JUnit"
+                displayName = "JUnit"
                 sourceRoot {
                     path = "$kotlin_root/libraries/kotlin.test/junit/src/main/kotlin"
                 }
@@ -397,7 +331,7 @@ gradle.projectsEvaluated {
                 classpath = kotlinTestJunit5Classpath
                 languageVersion = kotlinLanguageVersion
                 includeRootPackage = false
-                sourceSetName = "JUnit5"
+                displayName = "JUnit5"
                 sourceRoot {
                     path = "$kotlin_root/libraries/kotlin.test/junit5/src/main/kotlin"
                 }
@@ -420,7 +354,7 @@ gradle.projectsEvaluated {
                 classpath = kotlinTestTestngClasspath
                 languageVersion = kotlinLanguageVersion
                 includeRootPackage = false
-                sourceSetName = "TestNG"
+                displayName = "TestNG"
                 sourceRoot {
                     path = "$kotlin_root/libraries/kotlin.test/testng/src/main/kotlin"
                 }
@@ -443,7 +377,7 @@ gradle.projectsEvaluated {
                 classpath = kotlinTestJsClasspath
                 languageVersion = kotlinLanguageVersion
                 includeRootPackage = false
-                sourceSetName = "JS"
+                displayName = "JS"
                 sourceRoot {
                     path = "$kotlin_root/libraries/kotlin.test/js/src/main/kotlin"
                 }
@@ -466,7 +400,7 @@ gradle.projectsEvaluated {
                 classpath = kotlinTestJsClasspath
                 languageVersion = kotlinLanguageVersion
                 includeRootPackage = false
-                sourceSetName = "Native"
+                displayName = "Native"
                 sourceRoot {
                     path = "$kotlin_native_root/runtime/src/main/kotlin/kotlin/test"
                 }
@@ -480,7 +414,7 @@ gradle.projectsEvaluated {
 
 
     callDokka.finalizedBy dokkaStdlib
-    dokkaStdlib.finalizedBy dokkaKotlinTest
+//    dokkaStdlib.finalizedBy dokkaKotlinTest
 }
 
 tasks {
