@@ -92,7 +92,7 @@ gradle.projectsEvaluated {
         disableAutoconfiguration = true
         dokkaSourceSets {
             "kotlin-stdlib-common" {
-                moduleName = "kotlin-stdlib"
+                moduleDisplayName = "kotlin-stdlib"
                 skipDeprecated = false
                 jdkVersion = 8
                 platform = "common"
@@ -103,7 +103,6 @@ gradle.projectsEvaluated {
                 languageVersion = kotlinLanguageVersion
                 includeRootPackage = false
                 samples = [stdlibSamples.toString()]
-                sourceSetID = "Common"
                 displayName = "Common"
                 sourceRoot {
                     path = "$kotlin_root/core/builtins/native"
@@ -117,7 +116,7 @@ gradle.projectsEvaluated {
             }
 
             "kotlin-stdlib-java" {
-                moduleName = "kotlin-stdlib"
+                moduleDisplayName = "kotlin-stdlib"
                 skipDeprecated = false
                 jdkVersion = 8
                 platform = "jvm"
@@ -128,7 +127,7 @@ gradle.projectsEvaluated {
                 includeRootPackage = false
                 samples = [stdlibSamples.toString()]
                 displayName = "JRE"
-                dependentSourceSets = ["Common"]
+                dependsOn("kotlin-stdlib-common")
                 sourceRoot {
                     path = "$kotlin_sources/kotlin-stdlib"
                 }
@@ -180,7 +179,7 @@ gradle.projectsEvaluated {
 
 
             "kotlin-stdlib-js" {
-                moduleName = "kotlin-stdlib"
+                moduleDisplayName = "kotlin-stdlib"
                 skipDeprecated = false
                 jdkVersion = 8
                 platform = "js"
@@ -192,7 +191,7 @@ gradle.projectsEvaluated {
                 includeRootPackage = false
                 samples = [stdlibSamples.toString()]
                 displayName = "JS"
-                dependentSourceSets = ["Common"]
+                dependsOn("kotlin-stdlib-common")
 
                 sourceRoot {
                     path = "$kotlin_sources/kotlin-stdlib-js"
@@ -220,7 +219,7 @@ gradle.projectsEvaluated {
             }
 
             "kotlin-stdlib-native" {
-                moduleName = "kotlin-stdlib"
+                moduleDisplayName = "kotlin-stdlib"
                 skipDeprecated = false
                 jdkVersion = 8
                 platform = "native"
@@ -232,7 +231,7 @@ gradle.projectsEvaluated {
                 includeRootPackage = "false"
                 samples = [stdlibSamples.toString()]
                 displayName = "Native"
-                dependentSourceSets = ["Common"]
+                dependsOn("kotlin-stdlib-common")
 
                 sourceRoot {
                     path = "$kotlin_native_root/Interop/Runtime/src/main/kotlin"
@@ -263,7 +262,7 @@ gradle.projectsEvaluated {
         disableAutoconfiguration = true
         dokkaSourceSets {
             "kotlin-test-common" {
-                moduleName = "kotlin.test"
+                moduleDisplayName = "kotlin.test"
                 skipDeprecated = false
                 jdkVersion = 8
                 platform = "common"
@@ -281,7 +280,7 @@ gradle.projectsEvaluated {
             }
 
             "kotlin-test-jvm" {
-                moduleName = "kotlin.test"
+                moduleDisplayName = "kotlin.test"
                 skipDeprecated = false
                 jdkVersion = 8
                 platform = "jvm"
@@ -300,7 +299,7 @@ gradle.projectsEvaluated {
             }
 
             "kotlin-test-JUnit" {
-                moduleName = "kotlin.test"
+                moduleDisplayName = "kotlin.test"
                 skipDeprecated = false
                 jdkVersion = 8
                 platform = "jvm"
@@ -323,7 +322,7 @@ gradle.projectsEvaluated {
             }
 
             "kotlin-test-JUnit5" {
-                moduleName = "kotlin.test"
+                moduleDisplayName = "kotlin.test"
                 skipDeprecated = false
                 jdkVersion = 8
                 platform = "jvm"
@@ -346,7 +345,7 @@ gradle.projectsEvaluated {
             }
 
             "kotlin-test-TestNG" {
-                moduleName = "kotlin.test"
+                moduleDisplayName = "kotlin.test"
                 skipDeprecated = false
                 jdkVersion = 8
                 platform = "jvm"
@@ -369,7 +368,7 @@ gradle.projectsEvaluated {
             }
 
             "kotlin-test-js" {
-                moduleName = "kotlin.test"
+                moduleDisplayName = "kotlin.test"
                 skipDeprecated = false
                 jdkVersion = 8
                 platform = "js"
@@ -392,7 +391,7 @@ gradle.projectsEvaluated {
             }
 
             "kotlin-test-native" {
-                moduleName = "kotlin.test"
+                moduleDisplayName = "kotlin.test"
                 skipDeprecated = false
                 jdkVersion = 8
                 platform = "native"
