@@ -47,10 +47,6 @@ task cleanupSources(type: Delete) {
     }
 }
 
-dependencies {
-    dokkaPlugins("org.jetbrains.dokka:dokka-base:$dokka_version")
-}
-
 def outputDir = "$buildDir/dokka"
 
 
