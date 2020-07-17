@@ -22,6 +22,7 @@ configurations {
 repositories {
     mavenLocal()
     mavenCentral()
+    maven { url = "https://dl.bintray.com/kotlin/kotlin-eap" }
     maven { url = "https://dl.bintray.com/kotlin/kotlin-dev" }
     maven { url = "https://teamcity.jetbrains.com/guestAuth/repository/download/Kotlin_Dokka_DokkaAntMavenGradle/$dokka_build/maven" }
     jcenter()
