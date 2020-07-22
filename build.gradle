@@ -112,7 +112,7 @@ gradle.projectsEvaluated {
                 }
             }
 
-            "kotlin-stdlib-java" {
+            "kotlin-stdlib-java-common" {
                 moduleDisplayName = "kotlin-stdlib"
                 skipDeprecated = false
                 jdkVersion = 8
@@ -127,12 +127,6 @@ gradle.projectsEvaluated {
                 dependsOn("kotlin-stdlib-common")
                 sourceRoot {
                     path = "$kotlin_sources/kotlin-stdlib"
-                }
-                sourceRoot {
-                    path = "$kotlin_sources/kotlin-stdlib-jdk7"
-                }
-                sourceRoot {
-                    path = "$kotlin_sources/kotlin-stdlib-jdk8"
                 }
                 sourceRoot {
                     path = "$kotlin_root/core/reflection.jvm/src"
@@ -151,6 +145,86 @@ gradle.projectsEvaluated {
                 }
                 sourceRoot {
                     path = "$kotlin_root/libraries/stdlib/jvm/runtime/kotlin/text/TypeAliases.kt"
+                }
+                perPackageOption {
+                    prefix = "kotlin.reflect.jvm.internal"
+                    suppress = true
+                }
+                perPackageOption {
+                    prefix = "kotlin.jvm.functions"
+                    suppress = true
+                }
+                perPackageOption {
+                    prefix = "kotlin.jvm.internal"
+                    suppress = true
+                }
+                perPackageOption {
+                    prefix = "kotlin.coroutines.jvm.internal"
+                    suppress = true
+                }
+                perPackageOption {
+                    prefix = "kotlin.coroutines.experimental.migration"
+                    suppress = true
+                }
+            }
+
+
+            "kotlin-stdlib-jdk8" {
+                moduleDisplayName = "kotlin-stdlib"
+                skipDeprecated = false
+                jdkVersion = 8
+                platform = "jvm"
+                includes = [stdlibIncludeMd.toString()]
+                noStdlibLink = true
+                classpath = stdlibJvmClasspath + stdlibCommonClasspath
+                languageVersion = kotlinLanguageVersion
+                includeRootPackage = false
+                skipEmptyPackages = true
+                samples = [stdlibSamples.toString()]
+                displayName = "JRE8"
+                dependsOn("kotlin-stdlib-java-common")
+                sourceRoot {
+                    path = "$kotlin_sources/kotlin-stdlib-jdk8"
+                }
+                perPackageOption {
+                    prefix = "kotlin.reflect.jvm.internal"
+                    suppress = true
+                }
+                perPackageOption {
+                    prefix = "kotlin.jvm.functions"
+                    suppress = true
+                }
+                perPackageOption {
+                    prefix = "kotlin.jvm.internal"
+                    suppress = true
+                }
+                perPackageOption {
+                    prefix = "kotlin.coroutines.jvm.internal"
+                    suppress = true
+                }
+                perPackageOption {
+                    prefix = "kotlin.coroutines.experimental.migration"
+                    suppress = true
+                }
+            }
+
+            "kotlin-stdlib-jdk7" {
+                moduleDisplayName = "kotlin-stdlib"
+                skipDeprecated = false
+                jdkVersion = 8
+                platform = "jvm"
+                includes = [stdlibIncludeMd.toString()]
+                noStdlibLink = true
+                classpath = stdlibJvmClasspath + stdlibCommonClasspath
+                languageVersion = kotlinLanguageVersion
+                includeRootPackage = false
+                skipEmptyPackages = true
+                samples = [stdlibSamples.toString()]
+                displayName = "JRE7"
+                dependsOn("kotlin-stdlib-java-common")
+
+                sourceRoot {
+                    path = "$kotlin_sources/kotlin-stdlib-jdk7"
                 }
                 perPackageOption {
                     prefix = "kotlin.reflect.jvm.internal"
