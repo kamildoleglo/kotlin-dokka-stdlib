@@ -1,3 +1,5 @@
+import org.jetbrains.dokka.Platform
+
 buildscript {
     repositories {
         mavenLocal()
@@ -82,401 +84,349 @@ gradle.projectsEvaluated {
 
     def stdlibPackageList = new URL("file://$outputDir/kotlin-stdlib/kotlin-stdlib/package-list".toString())
     def junit5PackageList = new URL("https://junit.org/junit5/docs/current/api/element-list".toString())
-    def kotlinLanguageVersion = 1.4
+    def kotlinLanguageVersion = "1.4"
 
     task dokkaStdlib(type: org.jetbrains.dokka.gradle.DokkaTask) {
-        outputDirectory = outputDir + "/kotlin-stdlib"
-        disableAutoconfiguration = true
+        outputDirectory.set(new File(outputDir, "/kotlin-stdlib"))
         dokkaSourceSets {
-            "kotlin-stdlib-common" {
-                moduleDisplayName = "kotlin-stdlib"
-                skipDeprecated = false
-                jdkVersion = 8
-                platform = "common"
-                includes = [stdlibIncludeMd.toString()]
-                noStdlibLink = true
-                noJdkLink = true
-                classpath = stdlibCommonClasspath
-                languageVersion = kotlinLanguageVersion
-                includeRootPackage = false
-                samples = [stdlibSamples.toString()]
-                displayName = "Common"
-                sourceRoot {
-                    path = "$kotlin_root/core/builtins/native"
-                }
-                sourceRoot {
-                    path = "$kotlin_root/core/builtins/src"
-                }
-                sourceRoot {
-                    path = "$kotlin_sources/kotlin-stdlib-common"
-                }
+            register("kotlin-stdlib-common") {
+                moduleDisplayName.set("kotlin-stdlib")
+                skipDeprecated.set(false)
+                jdkVersion.set(8)
+                platform.set(Platform.common)
+                includes.from(stdlibIncludeMd.toString())
+                noStdlibLink.set(true)
+                noJdkLink.set(true)
+                classpath.setFrom(stdlibCommonClasspath)
+                languageVersion.set(kotlinLanguageVersion)
+                
+                samples.from(stdlibSamples.toString())
+                displayName.set("Common")
+                sourceRoots.from("$kotlin_root/core/builtins/native")
+                sourceRoots.from("$kotlin_root/core/builtins/src")
+                sourceRoots.from("$kotlin_sources/kotlin-stdlib-common")
             }
 
-            "kotlin-stdlib-java-common" {
-                moduleDisplayName = "kotlin-stdlib"
-                skipDeprecated = false
-                jdkVersion = 8
-                platform = "jvm"
-                includes = [stdlibIncludeMd.toString()]
-                noStdlibLink = true
-                classpath = stdlibJvmClasspath + stdlibCommonClasspath
-                languageVersion = kotlinLanguageVersion
-                includeRootPackage = false
-                samples = [stdlibSamples.toString()]
-                displayName = "JRE"
+            register("kotlin-stdlib-java-common") {
+                moduleDisplayName.set("kotlin-stdlib")
+                skipDeprecated.set(false)
+                jdkVersion.set(8)
+                platform.set(Platform.jvm)
+                includes.from(stdlibIncludeMd.toString())
+                noStdlibLink.set(true)
+                classpath.setFrom(stdlibJvmClasspath + stdlibCommonClasspath)
+                languageVersion.set(kotlinLanguageVersion)
+                
+                samples.from(stdlibSamples.toString())
+                displayName.set("JRE")
                 dependsOn("kotlin-stdlib-common")
-                sourceRoot {
-                    path = "$kotlin_sources/kotlin-stdlib"
-                }
-                sourceRoot {
-                    path = "$kotlin_root/core/reflection.jvm/src"
-                }
-                sourceRoot {
-                    path = "$kotlin_root/libraries/stdlib/jvm/runtime/kotlin/jvm/annotations"
-                }
-                sourceRoot {
-                    path = "$kotlin_root/libraries/stdlib/jvm/runtime/kotlin/jvm/JvmClassMapping.kt"
-                }
-                sourceRoot {
-                    path = "$kotlin_root/libraries/stdlib/jvm/runtime/kotlin/jvm/PurelyImplements.kt"
-                }
-                sourceRoot {
-                    path = "$kotlin_root/libraries/stdlib/jvm/runtime/kotlin/TypeAliases.kt"
-                }
-                sourceRoot {
-                    path = "$kotlin_root/libraries/stdlib/jvm/runtime/kotlin/text/TypeAliases.kt"
+                sourceRoots.from("$kotlin_sources/kotlin-stdlib")
+                sourceRoots.from("$kotlin_root/core/reflection.jvm/src")
+                sourceRoots.from("$kotlin_root/libraries/stdlib/jvm/runtime/kotlin/jvm/annotations")
+                sourceRoots.from("$kotlin_root/libraries/stdlib/jvm/runtime/kotlin/jvm/JvmClassMapping.kt")
+                sourceRoots.from("$kotlin_root/libraries/stdlib/jvm/runtime/kotlin/jvm/PurelyImplements.kt")
+                sourceRoots.from("$kotlin_root/libraries/stdlib/jvm/runtime/kotlin/TypeAliases.kt")
+                sourceRoots.from("$kotlin_root/libraries/stdlib/jvm/runtime/kotlin/text/TypeAliases.kt")
+                perPackageOption {
+                    prefix.set("kotlin.reflect.jvm.internal")
+                    suppress.set(true)
                 }
                 perPackageOption {
-                    prefix = "kotlin.reflect.jvm.internal"
-                    suppress = true
+                    prefix.set("kotlin.jvm.functions")
+                    suppress.set(true)
                 }
                 perPackageOption {
-                    prefix = "kotlin.jvm.functions"
-                    suppress = true
+                    prefix.set("kotlin.jvm.internal")
+                    suppress.set(true)
                 }
                 perPackageOption {
-                    prefix = "kotlin.jvm.internal"
-                    suppress = true
+                    prefix.set("kotlin.coroutines.jvm.internal")
+                    suppress.set(true)
                 }
                 perPackageOption {
-                    prefix = "kotlin.coroutines.jvm.internal"
-                    suppress = true
-                }
-                perPackageOption {
-                    prefix = "kotlin.coroutines.experimental.migration"
-                    suppress = true
+                    prefix.set("kotlin.coroutines.experimental.migration")
+                    suppress.set(true)
                 }
             }
 
 
-            "kotlin-stdlib-jdk8" {
-                moduleDisplayName = "kotlin-stdlib"
-                skipDeprecated = false
-                jdkVersion = 8
-                platform = "jvm"
-                includes = [stdlibIncludeMd.toString()]
-                noStdlibLink = true
-                classpath = stdlibJvmClasspath + stdlibCommonClasspath
-                languageVersion = kotlinLanguageVersion
-                includeRootPackage = false
-                skipEmptyPackages = true
-                samples = [stdlibSamples.toString()]
-                displayName = "JRE8"
+            register("kotlin-stdlib-jdk8") {
+                moduleDisplayName.set("kotlin-stdlib")
+                skipDeprecated.set(false)
+                jdkVersion.set(8)
+                platform.set(Platform.jvm)
+                includes.from(stdlibIncludeMd.toString())
+                noStdlibLink.set(true)
+                classpath.setFrom(stdlibJvmClasspath + stdlibCommonClasspath)
+                languageVersion.set(kotlinLanguageVersion)
+                
+                
+                samples.from(stdlibSamples.toString())
+                displayName.set("JRE8")
                 dependsOn("kotlin-stdlib-java-common")
-                sourceRoot {
-                    path = "$kotlin_sources/kotlin-stdlib-jdk8"
+                sourceRoots.from("$kotlin_sources/kotlin-stdlib-jdk8")
+                perPackageOption {
+                    prefix.set("kotlin.reflect.jvm.internal")
+                    suppress.set(true)
                 }
                 perPackageOption {
-                    prefix = "kotlin.reflect.jvm.internal"
-                    suppress = true
+                    prefix.set("kotlin.jvm.functions")
+                    suppress.set(true)
                 }
                 perPackageOption {
-                    prefix = "kotlin.jvm.functions"
-                    suppress = true
+                    prefix.set("kotlin.jvm.internal")
+                    suppress.set(true)
                 }
                 perPackageOption {
-                    prefix = "kotlin.jvm.internal"
-                    suppress = true
+                    prefix.set("kotlin.coroutines.jvm.internal")
+                    suppress.set(true)
                 }
                 perPackageOption {
-                    prefix = "kotlin.coroutines.jvm.internal"
-                    suppress = true
-                }
-                perPackageOption {
-                    prefix = "kotlin.coroutines.experimental.migration"
-                    suppress = true
+                    prefix.set("kotlin.coroutines.experimental.migration")
+                    suppress.set(true)
                 }
             }
 
-            "kotlin-stdlib-jdk7" {
-                moduleDisplayName = "kotlin-stdlib"
-                skipDeprecated = false
-                jdkVersion = 8
-                platform = "jvm"
-                includes = [stdlibIncludeMd.toString()]
-                noStdlibLink = true
-                classpath = stdlibJvmClasspath + stdlibCommonClasspath
-                languageVersion = kotlinLanguageVersion
-                includeRootPackage = false
-                skipEmptyPackages = true
-                samples = [stdlibSamples.toString()]
-                displayName = "JRE7"
+            register("kotlin-stdlib-jdk7") {
+                moduleDisplayName.set("kotlin-stdlib")
+                skipDeprecated.set(false)
+                jdkVersion.set(8)
+                platform.set(Platform.jvm)
+                includes.from(stdlibIncludeMd.toString())
+                noStdlibLink.set(true)
+                classpath.setFrom(stdlibJvmClasspath + stdlibCommonClasspath)
+                languageVersion.set(kotlinLanguageVersion)
+                
+                
+                samples.from(stdlibSamples.toString())
+                displayName.set("JRE7")
                 dependsOn("kotlin-stdlib-java-common")
 
-                sourceRoot {
-                    path = "$kotlin_sources/kotlin-stdlib-jdk7"
+                sourceRoots.from("$kotlin_sources/kotlin-stdlib-jdk7")
+                perPackageOption {
+                    prefix.set("kotlin.reflect.jvm.internal")
+                    suppress.set(true)
                 }
                 perPackageOption {
-                    prefix = "kotlin.reflect.jvm.internal"
-                    suppress = true
+                    prefix.set("kotlin.jvm.functions")
+                    suppress.set(true)
                 }
                 perPackageOption {
-                    prefix = "kotlin.jvm.functions"
-                    suppress = true
+                    prefix.set("kotlin.jvm.internal")
+                    suppress.set(true)
                 }
                 perPackageOption {
-                    prefix = "kotlin.jvm.internal"
-                    suppress = true
+                    prefix.set("kotlin.coroutines.jvm.internal")
+                    suppress.set(true)
                 }
                 perPackageOption {
-                    prefix = "kotlin.coroutines.jvm.internal"
-                    suppress = true
-                }
-                perPackageOption {
-                    prefix = "kotlin.coroutines.experimental.migration"
-                    suppress = true
+                    prefix.set("kotlin.coroutines.experimental.migration")
+                    suppress.set(true)
                 }
             }
 
 
-            "kotlin-stdlib-js" {
-                moduleDisplayName = "kotlin-stdlib"
-                skipDeprecated = false
-                jdkVersion = 8
-                platform = "js"
-                includes = [stdlibIncludeMd.toString()]
-                noStdlibLink = true
-                noJdkLink = true
-                classpath = stdlibJsClasspath + stdlibCommonClasspath
-                languageVersion = kotlinLanguageVersion
-                includeRootPackage = false
-                samples = [stdlibSamples.toString()]
-                displayName = "JS"
+            register("kotlin-stdlib-js") {
+                moduleDisplayName.set("kotlin-stdlib")
+                skipDeprecated.set(false)
+                jdkVersion.set(8)
+                platform.set(Platform.js)
+                includes.from(stdlibIncludeMd.toString())
+                noStdlibLink.set(true)
+                noJdkLink.set(true)
+                classpath.setFrom(stdlibJsClasspath + stdlibCommonClasspath)
+                languageVersion.set(kotlinLanguageVersion)
+                
+                samples.from(stdlibSamples.toString())
+                displayName.set("JS")
                 dependsOn("kotlin-stdlib-common")
 
-                sourceRoot {
-                    path = "$kotlin_sources/kotlin-stdlib-js"
+                sourceRoots.from("$kotlin_sources/kotlin-stdlib-js")
+                perPackageOption {
+                    prefix.set("org.w3c")
+                    reportUndocumented.set(false)
                 }
                 perPackageOption {
-                    prefix = "org.w3c"
-                    reportUndocumented = false
+                    prefix.set("org.khronos")
+                    reportUndocumented.set(false)
                 }
                 perPackageOption {
-                    prefix = "org.khronos"
-                    reportUndocumented = false
+                    prefix.set("jquery")
+                    suppress.set(true)
                 }
                 perPackageOption {
-                    prefix = "jquery"
-                    suppress = true
+                    prefix.set("kotlin.reflect.jvm.internal")
+                    suppress.set(true)
                 }
                 perPackageOption {
-                    prefix = "kotlin.reflect.jvm.internal"
-                    suppress = true
-                }
-                perPackageOption {
-                    prefix = "kotlin.js.internal"
-                    suppress = true
+                    prefix.set("kotlin.js.internal")
+                    suppress.set(true)
                 }
             }
 
-            "kotlin-stdlib-native" {
-                moduleDisplayName = "kotlin-stdlib"
-                skipDeprecated = false
-                jdkVersion = 8
-                platform = "native"
-                includes = [stdlibIncludeMd.toString()]
-                noStdlibLink = true
-                noJdkLink = true
-                classpath = stdlibNativeClasspath + stdlibCommonClasspath
-                languageVersion = kotlinLanguageVersion
-                includeRootPackage = "false"
-                samples = [stdlibSamples.toString()]
-                displayName = "Native"
+            register("kotlin-stdlib-native") {
+                moduleDisplayName.set("kotlin-stdlib")
+                skipDeprecated.set(false)
+                jdkVersion.set(8)
+                platform.set(Platform.native)
+                includes.from(stdlibIncludeMd.toString())
+                noStdlibLink.set(true)
+                noJdkLink.set(true)
+                classpath.setFrom(stdlibNativeClasspath + stdlibCommonClasspath)
+                languageVersion.set(kotlinLanguageVersion)
+                
+                samples.from(stdlibSamples.toString())
+                displayName.set("Native")
                 dependsOn("kotlin-stdlib-common")
 
-                sourceRoot {
-                    path = "$kotlin_native_root/Interop/Runtime/src/main/kotlin"
-                }
-                sourceRoot {
-                    path = "$kotlin_native_root/Interop/Runtime/src/native/kotlin"
-                }
-                sourceRoot {
-                    path = "$kotlin_native_root/Interop/JsRuntime/src/main/kotlin"
-                }
-                sourceRoot {
-                    path = "$kotlin_native_root/runtime/src/main/kotlin"
+                sourceRoots.from("$kotlin_native_root/Interop/Runtime/src/main/kotlin")
+                sourceRoots.from("$kotlin_native_root/Interop/Runtime/src/native/kotlin")
+                sourceRoots.from("$kotlin_native_root/Interop/JsRuntime/src/main/kotlin")
+                sourceRoots.from("$kotlin_native_root/runtime/src/main/kotlin")
+                perPackageOption {
+                    prefix.set("kotlin.native.internal")
+                    suppress.set(true)
                 }
                 perPackageOption {
-                    prefix = "kotlin.native.internal"
-                    suppress = true
-                }
-                perPackageOption {
-                    prefix = "kotlin.test"
-                    suppress = true
+                    prefix.set("kotlin.test")
+                    suppress.set(true)
                 }
             }
         }
     }
 
     task dokkaKotlinTest(type: org.jetbrains.dokka.gradle.DokkaTask) {
-        outputDirectory = outputDir + "/kotlin.test"
-        disableAutoconfiguration = true
+        outputDirectory.set(new File(outputDir, "kotlin.test"))
         dokkaSourceSets {
             "kotlin-test-common" {
-                moduleDisplayName = "kotlin.test"
-                skipDeprecated = false
-                jdkVersion = 8
-                platform = "common"
-                includes = [kotlinTestIncludeMd.toString()]
-                classpath = kotlinTestCommonClasspath
-                languageVersion = kotlinLanguageVersion
-                includeRootPackage = false
-                displayName = "Common"
-                sourceRoot {
-                    path = "$kotlin_root/libraries/kotlin.test/common/src/main/kotlin"
-                }
-                sourceRoot {
-                    path = "$kotlin_root/libraries/kotlin.test/annotations-common/src/main/kotlin"
-                }
+                moduleDisplayName.set("kotlin.test")
+                skipDeprecated.set(false)
+                jdkVersion.set(8)
+                platform.set(Platform.common)
+                includes.from(kotlinTestIncludeMd.toString())
+                classpath.setFrom(kotlinTestCommonClasspath)
+                languageVersion.set(kotlinLanguageVersion)
+
+                displayName.set("Common")
+                sourceRoots.from("$kotlin_root/libraries/kotlin.test/common/src/main/kotlin")
+                sourceRoots.from("$kotlin_root/libraries/kotlin.test/annotations-common/src/main/kotlin")
             }
 
             "kotlin-test-jvm" {
-                moduleDisplayName = "kotlin.test"
-                skipDeprecated = false
-                jdkVersion = 8
-                platform = "jvm"
-                includes = [kotlinTestIncludeMd.toString()]
-                classpath = kotlinTestJvmClasspath
-                languageVersion = kotlinLanguageVersion
-                includeRootPackage = false
-                displayName = "JVM"
-                sourceRoot {
-                    path = "$kotlin_root/libraries/kotlin.test/jvm/src/main/kotlin"
-                }
+                moduleDisplayName.set("kotlin.test")
+                skipDeprecated.set(false)
+                jdkVersion.set(8)
+                platform.set(Platform.jvm)
+                includes.from(kotlinTestIncludeMd.toString())
+                classpath.setFrom(kotlinTestJvmClasspath)
+                languageVersion.set(kotlinLanguageVersion)
+
+                displayName.set("JVM")
+                sourceRoots.from("$kotlin_root/libraries/kotlin.test/jvm/src/main/kotlin")
                 perPackageOption {
-                    prefix = "org.junit"
-                    skipDeprecated = true
+                    prefix.set("org.junit")
+                    skipDeprecated.set(true)
                 }
             }
 
             "kotlin-test-JUnit" {
-                moduleDisplayName = "kotlin.test"
-                skipDeprecated = false
-                jdkVersion = 8
-                platform = "jvm"
-                includes = [kotlinTestIncludeMd.toString()]
-                classpath = kotlinTestJunitClasspath
-                languageVersion = kotlinLanguageVersion
-                includeRootPackage = false
-                displayName = "JUnit"
-                sourceRoot {
-                    path = "$kotlin_root/libraries/kotlin.test/junit/src/main/kotlin"
+                moduleDisplayName.set("kotlin.test")
+                skipDeprecated.set(false)
+                jdkVersion.set(8)
+                platform.set(Platform.jvm)
+                includes.from(kotlinTestIncludeMd.toString())
+                classpath.setFrom(kotlinTestJunitClasspath)
+                languageVersion.set(kotlinLanguageVersion)
+
+                displayName.set("JUnit")
+                sourceRoots.from("$kotlin_root/libraries/kotlin.test/junit/src/main/kotlin")
+                externalDocumentationLink {
+                    url.set(new URL("https://kotlinlang.org/api/latest/jvm/stdlib/"))
+                    packageListUrl.set(stdlibPackageList)
                 }
                 externalDocumentationLink {
-                    url = new URL("https://kotlinlang.org/api/latest/jvm/stdlib/")
-                    packageListUrl = stdlibPackageList
-                }
-                externalDocumentationLink {
-                    url = new URL("http://junit.org/junit4/javadoc/latest/")
-                    packageListUrl = new URL("http://junit.org/junit4/javadoc/latest/package-list")
+                    url.set(new URL("http://junit.org/junit4/javadoc/latest/"))
+                    packageListUrl.set(new URL("http://junit.org/junit4/javadoc/latest/package-list"))
                 }
             }
 
             "kotlin-test-JUnit5" {
-                moduleDisplayName = "kotlin.test"
-                skipDeprecated = false
-                jdkVersion = 8
-                platform = "jvm"
-                includes = [kotlinTestIncludeMd.toString()]
-                classpath = kotlinTestJunit5Classpath
-                languageVersion = kotlinLanguageVersion
-                includeRootPackage = false
-                displayName = "JUnit5"
-                sourceRoot {
-                    path = "$kotlin_root/libraries/kotlin.test/junit5/src/main/kotlin"
+                moduleDisplayName.set("kotlin.test")
+                skipDeprecated.set(false)
+                jdkVersion.set(8)
+                platform.set(Platform.jvm)
+                includes.from(kotlinTestIncludeMd.toString())
+                classpath.setFrom(kotlinTestJunit5Classpath)
+                languageVersion.set(kotlinLanguageVersion)
+
+                displayName.set("JUnit5")
+                sourceRoots.from("$kotlin_root/libraries/kotlin.test/junit5/src/main/kotlin")
+                externalDocumentationLink {
+                    url.set(new URL("https://kotlinlang.org/api/latest/jvm/stdlib/"))
+                    packageListUrl.set(stdlibPackageList)
                 }
                 externalDocumentationLink {
-                    url = new URL("https://kotlinlang.org/api/latest/jvm/stdlib/")
-                    packageListUrl = stdlibPackageList
-                }
-                externalDocumentationLink {
-                    url = new URL("https://junit.org/junit5/docs/current/api/")
-                    packageListUrl = junit5PackageList
+                    url.set(new URL("https://junit.org/junit5/docs/current/api/"))
+                    packageListUrl.set(junit5PackageList)
                 }
             }
 
             "kotlin-test-TestNG" {
-                moduleDisplayName = "kotlin.test"
-                skipDeprecated = false
-                jdkVersion = 8
-                platform = "jvm"
-                includes = [kotlinTestIncludeMd.toString()]
-                classpath = kotlinTestTestngClasspath
-                languageVersion = kotlinLanguageVersion
-                includeRootPackage = false
-                displayName = "TestNG"
-                sourceRoot {
-                    path = "$kotlin_root/libraries/kotlin.test/testng/src/main/kotlin"
+                moduleDisplayName.set("kotlin.test")
+                skipDeprecated.set(false)
+                jdkVersion.set(8)
+                platform.set(Platform.jvm)
+                includes.from(kotlinTestIncludeMd.toString())
+                classpath.setFrom(kotlinTestTestngClasspath)
+                languageVersion.set(kotlinLanguageVersion)
+
+                displayName.set("TestNG")
+                sourceRoots.from("$kotlin_root/libraries/kotlin.test/testng/src/main/kotlin")
+                externalDocumentationLink {
+                    url.set(new URL("https://kotlinlang.org/api/latest/jvm/stdlib/"))
+                    packageListUrl.set(stdlibPackageList)
                 }
                 externalDocumentationLink {
-                    url = new URL("https://kotlinlang.org/api/latest/jvm/stdlib/")
-                    packageListUrl = stdlibPackageList
-                }
-                externalDocumentationLink {
-                    url = new URL("https://jitpack.io/com/github/cbeust/testng/master/javadoc/")
-                    packageListUrl = new URL("https://jitpack.io/com/github/cbeust/testng/master/javadoc/package-list")
+                    url.set(new URL("https://jitpack.io/com/github/cbeust/testng/master/javadoc/"))
+                    packageListUrl.set(new URL("https://jitpack.io/com/github/cbeust/testng/master/javadoc/package-list"))
                 }
             }
 
             "kotlin-test-js" {
-                moduleDisplayName = "kotlin.test"
-                skipDeprecated = false
-                jdkVersion = 8
-                platform = "js"
-                includes = [kotlinTestIncludeMd.toString()]
-                classpath = kotlinTestJsClasspath
-                languageVersion = kotlinLanguageVersion
-                includeRootPackage = false
-                displayName = "JS"
-                sourceRoot {
-                    path = "$kotlin_root/libraries/kotlin.test/js/src/main/kotlin"
-                }
+                moduleDisplayName.set("kotlin.test")
+                skipDeprecated.set(false)
+                jdkVersion.set(8)
+                platform.set(Platform.js)
+                includes.from(kotlinTestIncludeMd.toString())
+                classpath.setFrom(kotlinTestJsClasspath)
+                languageVersion.set(kotlinLanguageVersion)
+
+                displayName.set("JS")
+                sourceRoots.from("$kotlin_root/libraries/kotlin.test/js/src/main/kotlin")
                 perPackageOption {
-                    prefix = "org.junit"
-                    skipDeprecated = true
+                    prefix.set("org.junit")
+                    skipDeprecated.set(true)
                 }
                 externalDocumentationLink {
-                    url = new URL("https://kotlinlang.org/api/latest/jvm/stdlib/")
-                    packageListUrl = stdlibPackageList
+                    url.set(new URL("https://kotlinlang.org/api/latest/jvm/stdlib/"))
+                    packageListUrl.set(stdlibPackageList)
                 }
             }
 
             "kotlin-test-native" {
-                moduleDisplayName = "kotlin.test"
-                skipDeprecated = false
-                jdkVersion = 8
-                platform = "native"
-                includes = [kotlinTestIncludeMd.toString()]
-                classpath = kotlinTestJsClasspath
-                languageVersion = kotlinLanguageVersion
-                includeRootPackage = false
-                displayName = "Native"
-                sourceRoot {
-                    path = "$kotlin_native_root/runtime/src/main/kotlin/kotlin/test"
-                }
+                moduleDisplayName.set("kotlin.test")
+                skipDeprecated.set(false)
+                jdkVersion.set(8)
+                platform.set(Platform.native)
+                includes.from(kotlinTestIncludeMd.toString())
+                classpath.setFrom(kotlinTestJsClasspath)
+                languageVersion.set(kotlinLanguageVersion)
+
+                displayName.set("Native")
+                sourceRoots.from("$kotlin_native_root/runtime/src/main/kotlin/kotlin/test")
                 externalDocumentationLink {
-                    url = new URL("https://kotlinlang.org/api/latest/jvm/stdlib/")
-                    packageListUrl = stdlibPackageList
+                    url.set(new URL("https://kotlinlang.org/api/latest/jvm/stdlib/"))
+                    packageListUrl.set(stdlibPackageList)
                 }
             }
         }
@@ -484,7 +434,7 @@ gradle.projectsEvaluated {
 
 
     callDokka.finalizedBy dokkaStdlib
-//    dokkaStdlib.finalizedBy dokkaKotlinTest
+    dokkaStdlib.finalizedBy dokkaKotlinTest
 }
 
 tasks {
