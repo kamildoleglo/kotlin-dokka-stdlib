@@ -88,9 +88,9 @@ gradle.projectsEvaluated {
 
     task dokkaStdlib(type: org.jetbrains.dokka.gradle.DokkaTask) {
         outputDirectory.set(new File(outputDir, "/kotlin-stdlib"))
+        moduleName.set("kotlin-stdlib")
         dokkaSourceSets {
             register("kotlin-stdlib-common") {
-                moduleDisplayName.set("kotlin-stdlib")
                 skipDeprecated.set(false)
                 jdkVersion.set(8)
                 platform.set(Platform.common)
@@ -108,7 +108,6 @@ gradle.projectsEvaluated {
             }
 
             register("kotlin-stdlib-java-common") {
-                moduleDisplayName.set("kotlin-stdlib")
                 skipDeprecated.set(false)
                 jdkVersion.set(8)
                 platform.set(Platform.jvm)
@@ -151,7 +150,6 @@ gradle.projectsEvaluated {
 
 
             register("kotlin-stdlib-jdk8") {
-                moduleDisplayName.set("kotlin-stdlib")
                 skipDeprecated.set(false)
                 jdkVersion.set(8)
                 platform.set(Platform.jvm)
@@ -188,7 +186,6 @@ gradle.projectsEvaluated {
             }
 
             register("kotlin-stdlib-jdk7") {
-                moduleDisplayName.set("kotlin-stdlib")
                 skipDeprecated.set(false)
                 jdkVersion.set(8)
                 platform.set(Platform.jvm)
@@ -227,7 +224,6 @@ gradle.projectsEvaluated {
 
 
             register("kotlin-stdlib-js") {
-                moduleDisplayName.set("kotlin-stdlib")
                 skipDeprecated.set(false)
                 jdkVersion.set(8)
                 platform.set(Platform.js)
@@ -265,7 +261,6 @@ gradle.projectsEvaluated {
             }
 
             register("kotlin-stdlib-native") {
-                moduleDisplayName.set("kotlin-stdlib")
                 skipDeprecated.set(false)
                 jdkVersion.set(8)
                 platform.set(Platform.native)
@@ -297,9 +292,9 @@ gradle.projectsEvaluated {
 
     task dokkaKotlinTest(type: org.jetbrains.dokka.gradle.DokkaTask) {
         outputDirectory.set(new File(outputDir, "kotlin.test"))
+        moduleName.set("kotlin.test")
         dokkaSourceSets {
             "kotlin-test-common" {
-                moduleDisplayName.set("kotlin.test")
                 skipDeprecated.set(false)
                 jdkVersion.set(8)
                 platform.set(Platform.common)
@@ -313,7 +308,6 @@ gradle.projectsEvaluated {
             }
 
             "kotlin-test-jvm" {
-                moduleDisplayName.set("kotlin.test")
                 skipDeprecated.set(false)
                 jdkVersion.set(8)
                 platform.set(Platform.jvm)
@@ -330,7 +324,6 @@ gradle.projectsEvaluated {
             }
 
             "kotlin-test-JUnit" {
-                moduleDisplayName.set("kotlin.test")
                 skipDeprecated.set(false)
                 jdkVersion.set(8)
                 platform.set(Platform.jvm)
@@ -351,7 +344,6 @@ gradle.projectsEvaluated {
             }
 
             "kotlin-test-JUnit5" {
-                moduleDisplayName.set("kotlin.test")
                 skipDeprecated.set(false)
                 jdkVersion.set(8)
                 platform.set(Platform.jvm)
@@ -372,7 +364,6 @@ gradle.projectsEvaluated {
             }
 
             "kotlin-test-TestNG" {
-                moduleDisplayName.set("kotlin.test")
                 skipDeprecated.set(false)
                 jdkVersion.set(8)
                 platform.set(Platform.jvm)
@@ -393,7 +384,6 @@ gradle.projectsEvaluated {
             }
 
             "kotlin-test-js" {
-                moduleDisplayName.set("kotlin.test")
                 skipDeprecated.set(false)
                 jdkVersion.set(8)
                 platform.set(Platform.js)
@@ -414,7 +404,6 @@ gradle.projectsEvaluated {
             }
 
             "kotlin-test-native" {
-                moduleDisplayName.set("kotlin.test")
                 skipDeprecated.set(false)
                 jdkVersion.set(8)
                 platform.set(Platform.native)
