@@ -7,7 +7,7 @@ import org.jetbrains.dokka.stdlibPlugin.merger.StdlibDocumentableMerger
 
 class DokkaStdlibPlugin : DokkaPlugin() {
 
-    val mergerer by extending {
+    val merger by extending {
         CoreExtensions.documentableMerger providing ::StdlibDocumentableMerger override plugin<DokkaBase>().documentableMerger
     }
 }
