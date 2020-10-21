@@ -70,8 +70,8 @@ gradle.projectsEvaluated {
     def stdlibSamples = "$kotlin_root/libraries/stdlib/samples/test"
     def kotlinTestIncludeMd = "$kotlin_root/libraries/kotlin.test/Module.md"
 
-    def stdlibCommonClasspath = ["$kotlin_libs/kotlin-stdlib-common".toString()]
-    def stdlibJvmClasspath = ["$kotlin_libs/kotlin-stdlib/".toString(), "$kotlin_sources/kotlin-stdlib-jdk7".toString(), "$kotlin_libs/kotlin-stdlib-jdk8/".toString(), "$kotlin_sources/kotlin-stdlib".toString(), "$kotlin_sources/kotlin-stdlib-common".toString(), "$kotlin_root/core/reflection.jvm/src".toString()]
+    def stdlibCommonClasspath = ["$kotlin_libs/kotlin-stdlib-common/".toString(), "$kotlin_sources/kotlin-stdlib-common/".toString()]
+    def stdlibJvmClasspath = ["$kotlin_libs/kotlin-stdlib/".toString(), "$kotlin_sources/kotlin-stdlib-jdk7/".toString(), "$kotlin_libs/kotlin-stdlib-jdk8/".toString(), "$kotlin_sources/kotlin-stdlib/".toString(), "$kotlin_sources/kotlin-stdlib-common/".toString(), "$kotlin_root/core/reflection.jvm/src".toString()]
     def stdlibNativeClasspath = ["$kotlin_native_linux/klib/common/stdlib".toString()]
     def stdlibJsClasspath = ["$kotlin_libs/kotlin-stdlib-js/".toString()]
     def kotlinTestCommonClasspath = ["$kotlin_libs/kotlin-test-common".toString()]
@@ -82,7 +82,7 @@ gradle.projectsEvaluated {
     def kotlinTestJvmClasspath = ["$kotlin_libs/kotlin-test".toString()]
 
 
-    def stdlibPackageList = new URL("file://$outputDir/kotlin-stdlib/kotlin-stdlib/package-list".toString())
+    def stdlibPackageList = new URL("file:///$outputDir/kotlin-stdlib/kotlin-stdlib/package-list".toString())
     def junit5PackageList = new URL("https://junit.org/junit5/docs/current/api/element-list".toString())
     def kotlinLanguageVersion = "1.4"
 
@@ -157,12 +157,12 @@ gradle.projectsEvaluated {
                 noStdlibLink.set(true)
                 classpath.setFrom(stdlibJvmClasspath + stdlibCommonClasspath)
                 languageVersion.set(kotlinLanguageVersion)
-                
-                
+
                 samples.from(stdlibSamples.toString())
                 displayName.set("JRE8")
                 dependsOn("kotlin-stdlib-java-common")
-                sourceRoots.from("$kotlin_sources/kotlin-stdlib-jdk8")
+                dependsOn("kotlin-stdlib-common")
+                sourceRoots.setFrom("$kotlin_sources/kotlin-stdlib-jdk8/")
                 perPackageOption {
                     prefix.set("kotlin.reflect.jvm.internal")
                     suppress.set(true)
@@ -198,7 +198,7 @@ gradle.projectsEvaluated {
                 samples.from(stdlibSamples.toString())
                 displayName.set("JRE7")
                 dependsOn("kotlin-stdlib-java-common")
-
+                dependsOn("kotlin-stdlib-common")
                 sourceRoots.from("$kotlin_sources/kotlin-stdlib-jdk7")
                 perPackageOption {
                     prefix.set("kotlin.reflect.jvm.internal")
